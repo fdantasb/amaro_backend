@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,7 +40,7 @@ public class ProductService {
             LOG.info(EXISTENT_PRODUCT);
             throw new ProductException(EXISTENT_PRODUCT);
         }
-        verifyTagList(product.getLabelTagList());
+        populateTagList(product);
 
         Product result = productRepository.save(product);
         LOG.info("Produto salvo id: " + product.getId());
@@ -46,13 +48,23 @@ public class ProductService {
         return result;
     }
 
-    private void verifyTagList(List<String> list) {
-        List<String> strings = list.stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
+    private void populateTagList(Product prod) {
+
+
+        List<String> strings = prod.getLabelTagList().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(strings)) {
             LOG.info("As seguintes Tags não foram encontradas:\n");
             strings.stream().forEach(s -> LOG.info(s));
             throw new ProductException(TAG_NAO_ENCONTRADA);
         }
+
+        List<Tag> tagList = new ArrayList<>();
+        prod.getLabelTagList().stream().forEach(s -> tagList.add(findTagByName(s)));
+
+        if (!tagList.isEmpty()){
+            prod.setTagList(tagList);
+        }
+
     }
 
     private boolean productExist(Product product) {

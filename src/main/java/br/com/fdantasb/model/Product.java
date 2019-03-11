@@ -12,7 +12,7 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonInclude(Include.NON_NULL)
     private Long id;
 
@@ -20,7 +20,11 @@ public class Product {
     private String name;
     @JsonIgnore
     @ManyToMany
+    @NotEmpty
     private List<Tag> tagList;
+
+    @Transient
+    private List<String> labelTagList;
 
     public Long getId() {
         return id;
@@ -44,5 +48,13 @@ public class Product {
 
     public void setTagList(List<Tag> tagList) {
         this.tagList = tagList;
+    }
+
+    public List<String> getLabelTagList() {
+        return labelTagList;
+    }
+
+    public void setLabelTagList(List<String> labelTagList) {
+        this.labelTagList = labelTagList;
     }
 }

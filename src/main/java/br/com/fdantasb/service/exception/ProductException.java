@@ -1,14 +1,14 @@
-package br.com.fdantasb.service.Package;
+package br.com.fdantasb.service.exception;
 
-public class ExistentProductException extends IllegalArgumentException {
+public class ProductException extends IllegalArgumentException {
 
 
 
-    public ExistentProductException(String message, Throwable cause) {
+    public ProductException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ExistentProductException(String message) {
+    public ProductException(String message) {
         super(message);
     }
 }

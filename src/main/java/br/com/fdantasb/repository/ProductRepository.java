@@ -1,4 +1,4 @@
-package br.com.fdantasb;
+package br.com.fdantasb.repository;
 
 import br.com.fdantasb.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

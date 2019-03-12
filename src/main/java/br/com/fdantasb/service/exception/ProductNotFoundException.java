@@ -1,14 +1,14 @@
 package br.com.fdantasb.service.exception;
 
-public class ProductException extends IllegalArgumentException {
+public class ProductNotFoundException extends IllegalArgumentException {
 
 
 
-    public ProductException(String message, Throwable cause) {
+    public ProductNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ProductException(String message) {
+    public ProductNotFoundException(String message) {
         super(message);
     }
 }

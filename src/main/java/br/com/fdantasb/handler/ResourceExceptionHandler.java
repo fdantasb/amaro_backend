@@ -1,7 +1,7 @@
 package br.com.fdantasb.handler;
 
 import br.com.fdantasb.model.ErrorDetails;
-import br.com.fdantasb.service.exception.ProductException;
+import br.com.fdantasb.service.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
-    @ExceptionHandler(ProductException.class)
+    @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorDetails> ProductException(MethodArgumentNotValidException ex, HttpServletRequest request){
         ErrorDetails result = new ErrorDetails();
         result.setTitle(ex.getMessage());

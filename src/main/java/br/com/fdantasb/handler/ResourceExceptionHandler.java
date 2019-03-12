@@ -24,6 +24,7 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
 
+    @ExceptionHandler(TagNotFoundException.class)
     public ResponseEntity<ErrorDetails> tagNotFoundException(TagNotFoundException ex, HttpServletRequest request){
         ErrorDetails result = new ErrorDetails();
         result.setTitle(ex.getMessage());

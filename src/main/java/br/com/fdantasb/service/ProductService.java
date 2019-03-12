@@ -4,7 +4,8 @@ import br.com.fdantasb.model.Product;
 import br.com.fdantasb.model.Tag;
 import br.com.fdantasb.repository.ProductRepository;
 import br.com.fdantasb.repository.TagRepository;
-import br.com.fdantasb.service.exception.ProductException;
+import br.com.fdantasb.service.exception.ProductNotFoundException;
+import br.com.fdantasb.service.exception.TagNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,7 +38,7 @@ public class ProductService {
     public Product createProduct(Product product) {
         if (productExist(product)){
             LOG.info(EXISTENT_PRODUCT);
-            throw new ProductException(EXISTENT_PRODUCT);
+            throw new ProductNotFoundException(EXISTENT_PRODUCT);
         }
         populateTagList(product);
 
@@ -55,7 +55,7 @@ public class ProductService {
         if (!CollectionUtils.isEmpty(strings)) {
             LOG.info("As seguintes Tags não foram encontradas:\n");
             strings.stream().forEach(s -> LOG.info(s));
-            throw new ProductException(TAG_NAO_ENCONTRADA);
+            throw new TagNotFoundException(TAG_NAO_ENCONTRADA);
         }
 
         List<Tag> tagList = new ArrayList<>();

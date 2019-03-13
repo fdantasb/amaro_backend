@@ -1,8 +1,12 @@
 package br.com.fdantasb.model;
 
-public class ErrorDetails {
+import java.io.Serializable;
 
-    private String title;
+public class ErrorDetails implements Serializable{
+	
+	private static final long serialVersionUID = 4429686955717261603L;
+	
+	private String title;
     private Long status;
     private Long timestamp;
 

@@ -5,11 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Tag {
-    @Id
+public class Tag implements Serializable{
+
+	private static final long serialVersionUID = -6201914584806478966L;
+
+	@Id
     @JsonInclude(Include.NON_NULL)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

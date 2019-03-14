@@ -1,14 +1,14 @@
 package br.com.fdantasb.service.exception;
 
-public class ProductNotFoundException extends IllegalArgumentException {
+public class ProductException extends IllegalArgumentException {
 
 	private static final long serialVersionUID = 2693881392048944662L;
 
-	public ProductNotFoundException(String message, Throwable cause) {
+	public ProductException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ProductNotFoundException(String message) {
+    public ProductException(String message) {
         super(message);
     }
 }

@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.fdantasb.model.ErrorDetails;
-import br.com.fdantasb.service.exception.ProductNotFoundException;
+import br.com.fdantasb.service.exception.ProductException;
 import br.com.fdantasb.service.exception.TagNotFoundException;
 import br.com.fdantasb.service.exception.TagsOutofBoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorDetails> productNotFoundException(ProductNotFoundException ex, HttpServletRequest request){
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorDetails> productException(ProductException ex, HttpServletRequest request){
         ErrorDetails result = new ErrorDetails();
         result.setTitle(ex.getMessage());
         result.setStatus(404l);
         result.setTimestamp(System.currentTimeMillis());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     @ExceptionHandler(TagNotFoundException.class)

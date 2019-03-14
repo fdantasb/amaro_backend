@@ -16,7 +16,7 @@ import br.com.fdantasb.model.Product;
 import br.com.fdantasb.model.Tag;
 import br.com.fdantasb.repository.ProductRepository;
 import br.com.fdantasb.repository.TagRepository;
-import br.com.fdantasb.service.exception.ProductNotFoundException;
+import br.com.fdantasb.service.exception.ProductException;
 import br.com.fdantasb.service.exception.TagNotFoundException;
 import br.com.fdantasb.service.exception.TagsOutofBoundException;
 
@@ -28,6 +28,7 @@ public class ProductService {
     private static final String TAGS_É_MAIOR_QUE_O_LIMITE = "A quantidade de tags é maior que o limite.";
 	private static final String EXISTENT_PRODUCT = "Produto já existe.\n ID: ";
     private static final String TAG_NAO_ENCONTRADA = "As seguintes Tags não foram encontradas:";
+	private static final String NOT_FOUND_PRODUCT = "Producot não encontrado.\n";
 
     @Autowired
     private ProductRepository productRepository;
@@ -91,7 +92,7 @@ public class ProductService {
     	Optional<Product> result = productRepository.findById(product.getId());
         if (result.isPresent()) {
         	LOG.info(EXISTENT_PRODUCT + product.getId());
-        	throw new ProductNotFoundException(EXISTENT_PRODUCT + product.getId());
+        	throw new ProductException(EXISTENT_PRODUCT + product.getId());
         }
         
         //valida se as tags já existem
@@ -143,6 +144,17 @@ public class ProductService {
 			result.add(tag.getNome());
 		}
 		return result;
+	}
+
+	public List<ProductData> findSimilarProductDataList(Long id) {
+		Product product = productRepository.findById(id).get();
+		if (product == null) {
+			LOG.info(NOT_FOUND_PRODUCT + id);
+        	throw new ProductException(NOT_FOUND_PRODUCT + id);
+		}
+		
+		
+		return null;
 	}
 
 }

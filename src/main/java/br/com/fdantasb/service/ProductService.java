@@ -6,6 +6,8 @@ import br.com.fdantasb.repository.ProductRepository;
 import br.com.fdantasb.repository.TagRepository;
 import br.com.fdantasb.service.exception.ProductNotFoundException;
 import br.com.fdantasb.service.exception.TagNotFoundException;
+import br.com.fdantasb.service.exception.TagsOutofBoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    public static final String EXISTENT_PRODUCT = "Produto já existe.";
+    private static final String TAGS_É_MAIOR_QUE_O_LIMITE = "A quantidade de tags é maior que o limite.";
+	public static final String EXISTENT_PRODUCT = "Produto já existe.";
     public static final String TAG_NAO_ENCONTRADA = "Tag não Encontrada.";
     private static Logger LOG = LoggerFactory.getLogger(ProductService.class);
 
@@ -49,23 +52,27 @@ public class ProductService {
     }
 
     private void populateTagList(Product prod) {
-
-
-        List<String> strings = prod.getTags().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(strings)) {
-            LOG.info("As seguintes Tags não foram encontradas:\n");
-            strings.stream().forEach(s -> LOG.info(s));
-            throw new TagNotFoundException(TAG_NAO_ENCONTRADA);
-        }
+        validateStringTags(prod);
 
         List<Tag> tagList = new ArrayList<>();
         prod.getTags().stream().forEach(s -> tagList.add(findTagByName(s)));
-
+        if (tagList.size() > 20) {
+			throw new TagsOutofBoundException(TAGS_É_MAIOR_QUE_O_LIMITE);
+		}
         if (!tagList.isEmpty()){
             prod.setTagList(tagList);
         }
 
     }
+
+	private void validateStringTags(Product prod) {
+		List<String> tagNotFound = prod.getTags().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(tagNotFound)) {
+            LOG.info("As seguintes Tags não foram encontradas:\n");
+            tagNotFound.stream().forEach(s -> LOG.info(s));
+            throw new TagNotFoundException(TAG_NAO_ENCONTRADA);
+        }
+	}
 
     private boolean productExist(Product product) {
         Optional<Product> result = productRepository.findById(product.getId());

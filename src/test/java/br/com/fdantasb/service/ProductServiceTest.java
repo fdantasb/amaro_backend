@@ -36,7 +36,7 @@ public class ProductServiceTest {
         List<String> taglist = new ArrayList<>();
         taglist.addAll(Arrays.asList("balada", "metal", "delicado", "descolado"));
 
-        product.setLabelTagList(taglist);
+        product.setTags(taglist);
 
         Product result = productService.createProduct(product);
 

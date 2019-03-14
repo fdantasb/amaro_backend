@@ -16,6 +16,4 @@ public class ProductData extends Product{
 		this.tagsVector = tagsVector;
 	}
 	
-	
-	
 }

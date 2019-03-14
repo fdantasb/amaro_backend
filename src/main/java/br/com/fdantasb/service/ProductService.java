@@ -26,8 +26,8 @@ public class ProductService {
 	private static Logger LOG = LoggerFactory.getLogger(ProductService.class);
 	
     private static final String TAGS_É_MAIOR_QUE_O_LIMITE = "A quantidade de tags é maior que o limite.";
-	private static final String EXISTENT_PRODUCT = "Produto já existe.";
-    private static final String TAG_NAO_ENCONTRADA = "Tag não Encontrada.";
+	private static final String EXISTENT_PRODUCT = "Produto já existe.\n ID: ";
+    private static final String TAG_NAO_ENCONTRADA = "As seguintes Tags não foram encontradas:";
 
     @Autowired
     private ProductRepository productRepository;
@@ -37,6 +37,7 @@ public class ProductService {
 
     public void createProductList(ArrayList<Product> productList) {
     	LOG.info("Tamanho da lista de produtos: " + productList.size());
+    	productList.stream().forEach(p -> validateProduct(p));
     	productList.stream().forEach(p -> createProduct(p));
     }
     
@@ -48,10 +49,6 @@ public class ProductService {
 
     public Product createProduct(Product product) {
     	LOG.info("Inserindo o produto de ID: " + product.getId());
-        if (productExist(product)){
-            LOG.info(EXISTENT_PRODUCT);
-            throw new ProductNotFoundException(EXISTENT_PRODUCT);
-        }
         populateTagList(product);
 
         Product result = productRepository.save(product);
@@ -61,9 +58,6 @@ public class ProductService {
     }
 
     private void populateTagList(Product prod) {
-        validateStringTags(prod);
-        
-        LOG.info("Tags validadas com sucesso");
         List<Tag> tagList = fillTagList(prod);
 		
         if (!tagList.isEmpty()){
@@ -96,22 +90,31 @@ public class ProductService {
 		return result;
 	}
 
-	private void validateStringTags(Product prod) {
-		List<String> tagNotFound = prod.getTags().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(tagNotFound)) {
-            LOG.info("As seguintes Tags não foram encontradas:\n");
-            tagNotFound.stream().forEach(s -> LOG.info(s));
-            throw new TagNotFoundException(TAG_NAO_ENCONTRADA);
+    private void validateProduct(Product product) {
+        //valida se o produto já existe na base
+    	Optional<Product> result = productRepository.findById(product.getId());
+        if (result.isPresent()) {
+        	LOG.info(EXISTENT_PRODUCT + product.getId());
+        	throw new ProductNotFoundException(EXISTENT_PRODUCT + product.getId());
         }
-        if (prod.getTags().size() > 20) {
+        
+        //valida se as tags já existem
+        List<String> tagNotFound = product.getTags().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(tagNotFound)) {
+        	String tagsError = "";
+        	for (String stringTag : tagNotFound) {
+				tagsError = tagsError.concat(stringTag + ", ");
+			}
+            LOG.info(TAG_NAO_ENCONTRADA);
+            throw new TagNotFoundException(TAG_NAO_ENCONTRADA.concat(tagsError));
+        }
+        
+        //valida tamanho da lista de tags
+        if (product.getTags().size() > 20) {
         	LOG.info(TAGS_É_MAIOR_QUE_O_LIMITE);
 			throw new TagsOutofBoundException(TAGS_É_MAIOR_QUE_O_LIMITE);
 		}
-	}
-
-    private boolean productExist(Product product) {
-        Optional<Product> result = productRepository.findById(product.getId());
-        return result.isPresent();
+                
     }
 
 }

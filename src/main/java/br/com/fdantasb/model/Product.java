@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
@@ -21,7 +19,7 @@ public class Product implements Serializable{
 	private static final long serialVersionUID = 2058550393627193515L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @JsonInclude(Include.NON_NULL)
     private Long id;
 

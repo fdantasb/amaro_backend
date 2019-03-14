@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import br.com.fdantasb.model.Product;
 
-public class ProductList implements Serializable{
+public class ProductListReceive implements Serializable{
 
 	private static final long serialVersionUID = 2459338070617866447L;
 	

@@ -26,8 +26,8 @@ public class ProductService {
 	private static Logger LOG = LoggerFactory.getLogger(ProductService.class);
 	
     private static final String TAGS_É_MAIOR_QUE_O_LIMITE = "A quantidade de tags é maior que o limite.";
-	public static final String EXISTENT_PRODUCT = "Produto já existe.";
-    public static final String TAG_NAO_ENCONTRADA = "Tag não Encontrada.";
+	private static final String EXISTENT_PRODUCT = "Produto já existe.";
+    private static final String TAG_NAO_ENCONTRADA = "Tag não Encontrada.";
 
     @Autowired
     private ProductRepository productRepository;
@@ -36,11 +36,13 @@ public class ProductService {
     private TagRepository tagRepository;
 
     public Tag findTagByName(String string) {
+    	LOG.info("Buscando Tag: " + string);
         Tag result = tagRepository.findByNome(string);
         return result;
     }
 
     public Product createProduct(Product product) {
+    	LOG.info("Inserindo o produto de ID: " + product.getId());
         if (productExist(product)){
             LOG.info(EXISTENT_PRODUCT);
             throw new ProductNotFoundException(EXISTENT_PRODUCT);
@@ -56,10 +58,11 @@ public class ProductService {
     private void populateTagList(Product prod) {
         validateStringTags(prod);
         
+        LOG.info("Tags validadas com sucesso");
         List<Tag> tagList = fillTagList(prod);
-
 		
         if (!tagList.isEmpty()){
+        	LOG.info("Inserindo Tags validadas");
             prod.setTagList(tagList);
         }
 
@@ -96,6 +99,7 @@ public class ProductService {
             throw new TagNotFoundException(TAG_NAO_ENCONTRADA);
         }
         if (prod.getTags().size() > 20) {
+        	LOG.info(TAGS_É_MAIOR_QUE_O_LIMITE);
 			throw new TagsOutofBoundException(TAGS_É_MAIOR_QUE_O_LIMITE);
 		}
 	}

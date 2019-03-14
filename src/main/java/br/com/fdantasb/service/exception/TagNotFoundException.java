@@ -8,6 +8,7 @@ public class TagNotFoundException extends IllegalArgumentException{
         super(message, cause);
     }
 
-    public TagNotFoundException(String tagNaoEncontrada) {
+    public TagNotFoundException(String message) {
+    	super(message);
     }
 }

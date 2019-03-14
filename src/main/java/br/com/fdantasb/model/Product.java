@@ -1,14 +1,19 @@
 package br.com.fdantasb.model;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-
-import java.io.Serializable;
-import java.util.List;
 
 @Entity
 public class Product implements Serializable{
@@ -22,13 +27,13 @@ public class Product implements Serializable{
 
     @NotEmpty(message = "O campo nome não pode ser vazio.")
     private String name;
-    @JsonIgnore
+
     @ManyToMany
-    @NotEmpty
+    @JsonIgnore
     private List<Tag> tagList;
 
     @Transient
-    private List<String> labelTagList;
+    private List<String> tags;
 
     public Long getId() {
         return id;
@@ -54,11 +59,11 @@ public class Product implements Serializable{
         this.tagList = tagList;
     }
 
-    public List<String> getLabelTagList() {
-        return labelTagList;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setLabelTagList(List<String> labelTagList) {
-        this.labelTagList = labelTagList;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

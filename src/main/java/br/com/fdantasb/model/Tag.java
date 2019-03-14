@@ -22,6 +22,9 @@ public class Tag implements Serializable{
     @NotEmpty
     private String nome;
 
+    @NotEmpty
+    private String position;
+
     @ManyToMany
     @JoinTable(name = "product_tag")
     private List<Product> productList;
@@ -48,5 +51,13 @@ public class Tag implements Serializable{
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

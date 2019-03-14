@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,12 +26,17 @@ public class ProductServiceTest {
         Tag tag = productService.findTagByName("balada");
         Assert.assertNotNull(tag);
     }
+    
+    @Test
+    public void findTagError() {
+    	Tag tag = productService.findTagByName("paete");
+        Assert.assertNull(tag);
+    }
 
     @Test
     public void createProductSuccess(){
-
         Product product = new Product();
-        product.setId(58345l);
+        product.setId(new Random().nextLong());
         product.setName("Saia Maxi Chiffon Saint");
 
         List<String> taglist = new ArrayList<>();
@@ -39,9 +45,8 @@ public class ProductServiceTest {
         product.setTags(taglist);
 
         Product result = productService.createProduct(product);
-
         Assert.assertNotNull(result);
-
     }
+    
 
 }

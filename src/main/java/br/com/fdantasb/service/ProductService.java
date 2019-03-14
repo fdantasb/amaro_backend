@@ -51,7 +51,7 @@ public class ProductService {
     private void populateTagList(Product prod) {
 
 
-        List<String> strings = prod.getLabelTagList().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
+        List<String> strings = prod.getTags().stream().filter(s -> findTagByName(s) == null).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(strings)) {
             LOG.info("As seguintes Tags não foram encontradas:\n");
             strings.stream().forEach(s -> LOG.info(s));
@@ -59,7 +59,7 @@ public class ProductService {
         }
 
         List<Tag> tagList = new ArrayList<>();
-        prod.getLabelTagList().stream().forEach(s -> tagList.add(findTagByName(s)));
+        prod.getTags().stream().forEach(s -> tagList.add(findTagByName(s)));
 
         if (!tagList.isEmpty()){
             prod.setTagList(tagList);

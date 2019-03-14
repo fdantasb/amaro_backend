@@ -35,6 +35,11 @@ public class ProductService {
     @Autowired
     private TagRepository tagRepository;
 
+    public void createProductList(ArrayList<Product> productList) {
+    	LOG.info("Tamanho da lista de produtos: " + productList.size());
+    	productList.stream().forEach(p -> createProduct(p));
+    }
+    
     public Tag findTagByName(String string) {
     	LOG.info("Buscando Tag: " + string);
         Tag result = tagRepository.findByNome(string);
@@ -108,4 +113,5 @@ public class ProductService {
         Optional<Product> result = productRepository.findById(product.getId());
         return result.isPresent();
     }
+
 }

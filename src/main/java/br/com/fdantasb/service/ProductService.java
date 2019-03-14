@@ -1,7 +1,6 @@
 package br.com.fdantasb.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -115,6 +114,7 @@ public class ProductService {
     }
 
 	public List<ProductData> findAllProductDataList() {
+		LOG.info("Procurando lista de todos os produtos");
 		List<Product> allProduct = productRepository.findAll();
 		List<ProductData> result = new ArrayList<>();
 		
@@ -126,6 +126,7 @@ public class ProductService {
 	}
 
 	private ProductData convertProductData(Product p) {
+		LOG.info("Convertendo produto de ID" + p.getId());
 		ProductData result = new ProductData();
 		result.setId(p.getId());
 		result.setName(p.getName());

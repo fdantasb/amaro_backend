@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import br.com.fdantasb.data.ProductData;
 import br.com.fdantasb.model.Product;
 import br.com.fdantasb.model.Tag;
 import br.com.fdantasb.repository.ProductRepository;
@@ -61,7 +62,7 @@ public class ProductService {
         List<Tag> tagList = fillTagList(prod);
 		
         if (!tagList.isEmpty()){
-        	LOG.info("Inserindo Tags validadas");
+        	LOG.info("Inserindo Tags");
             prod.setTagList(tagList);
         }
 
@@ -70,20 +71,16 @@ public class ProductService {
 	private List<Tag> fillTagList(Product prod) {
 		List<Tag> tags = new ArrayList<Tag>();
 		prod.getTags().stream().forEach(s -> tags.add(findTagByName(s)));
-		
-		Tag tagArray[] = tagOrderArray(tags);
-		
-		return Arrays.asList(tagArray);
+		return tags;
 	}
 
-	private Tag[] tagOrderArray(List<Tag> tags) {
-		Tag[] result = new Tag[20];
-		tags.stream().forEach(t -> result[Integer.valueOf(t.getPosition())] = t);
-		Tag neutral = tagRepository.findByPosition("0");
+	private String[] tagTagArray(List<Tag> tags) {
+		String[] result = new String[20];
+		tags.stream().forEach(t -> result[Integer.valueOf(t.getPosition())] = "1");
 		
 		for (int i = 0; i < result.length; i++) {
 			if (result[i] == null) {
-				result[i] = neutral;
+				result[i] = "0";
 			}
 		}
 		
@@ -116,5 +113,35 @@ public class ProductService {
 		}
                 
     }
+
+	public List<ProductData> findAllProductDataList() {
+		List<Product> allProduct = productRepository.findAll();
+		List<ProductData> result = new ArrayList<>();
+		
+		allProduct.stream().forEach(p -> result.add(convertProductData(p)));
+		
+		
+		return result;
+		
+	}
+
+	private ProductData convertProductData(Product p) {
+		ProductData result = new ProductData();
+		result.setId(p.getId());
+		result.setName(p.getName());
+		result.setTagsVector(tagTagArray(p.getTagList()));
+		List<String> tags = tagsFromTagList(p.getTagList());
+		result.setTags(tags);		
+		
+		return result;
+	}
+
+	private List<String> tagsFromTagList(List<Tag> tagList) {
+		List<String> result = new ArrayList<>();
+		for (Tag tag : tagList) {
+			result.add(tag.getNome());
+		}
+		return result;
+	}
 
 }

@@ -1,17 +1,16 @@
 package br.com.fdantasb.handler;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import br.com.fdantasb.model.ErrorDetails;
 import br.com.fdantasb.service.exception.ProductNotFoundException;
 import br.com.fdantasb.service.exception.TagNotFoundException;
 import br.com.fdantasb.service.exception.TagsOutofBoundException;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {

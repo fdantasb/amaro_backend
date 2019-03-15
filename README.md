@@ -127,8 +127,14 @@ Part 2: SAP HYBRIS
 Propose and describe a detailed solution (modules, classes, conditions, actions and points of entry) of how to customize the promotion mechanism according to the following criteria:
 Send Free Shipping to a specific freight option
 Carts with a value greater than R$ 200,00
+R-> From Core Extension with have a integration with the PPS (Promotion Pricing Service). We have a listener in Hybris for the price of the cart that checks if it's eligible for the promotion of free shipping. We need to custom at least 2 central services:
+
+-CalculationService
+-PromotionsService
 
 3 - Integration to TMS
 Provide and describe a detailed Hybris customization solution (modules, classes, and entry points) to integrate with the external Transportation Management System (TMS) mechanism for operations:
 Price
+R -> We need to configure the adapter to receive information, then go to publisher and then go to the processor to finally update the price. All this changes are made in SAP Commerce extension.
 Shipping request
+R -> In Order Management we need to got to ShippingDateStrategy and customize it, paying attention on spring configuration and the strategy.

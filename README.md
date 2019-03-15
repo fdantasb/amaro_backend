@@ -106,7 +106,18 @@ Search result example:
 ]
 
 Note: The above similarity values serve only as an example and do not represent the values that should be obtained with the supplied products.
+**********************************************************************************************************************************************************
+How to run the application:
 
+After clone the repository you need to run this project using Maven and with following command: mvn clean install spring-boot:run.
+The application uses H2 database as datasource.
+On the unit tests all tags will be created in database.
+
+This is the APIs available:
+- http://localhost:8080/product/create/list -> to use the payload to populate products;
+- http://localhost:8080/product/similar/{id} -> to find similar products using the ID;
+
+**********************************************************************************************************************************************************
 
 Part 2: SAP HYBRIS
 

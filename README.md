@@ -135,9 +135,11 @@ R-> From Core Extension with have a integration with the PPS (Promotion Pricing 
 
 3 - Integration to TMS
 Provide and describe a detailed Hybris customization solution (modules, classes, and entry points) to integrate with the external Transportation Management System (TMS) mechanism for operations:
+
 Price
 
 R -> We need to configure the adapter to receive information, then go to publisher and then go to the processor to finally update the price. All this changes are made in SAP Commerce extension.
+
 Shipping request
 
 R -> In Order Management we need to got to ShippingDateStrategy and customize it, paying attention on spring configuration and the strategy.

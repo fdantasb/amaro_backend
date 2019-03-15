@@ -1,20 +1,5 @@
 package br.com.fdantasb.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
 import br.com.fdantasb.data.ProductData;
 import br.com.fdantasb.data.Similar;
 import br.com.fdantasb.model.Product;
@@ -24,8 +9,24 @@ import br.com.fdantasb.repository.TagRepository;
 import br.com.fdantasb.service.exception.ProductException;
 import br.com.fdantasb.service.exception.TagNotFoundException;
 import br.com.fdantasb.service.exception.TagsOutofBoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductService {
 
 	private static Logger LOG = LoggerFactory.getLogger(ProductService.class);

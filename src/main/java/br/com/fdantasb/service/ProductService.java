@@ -1,7 +1,11 @@
 package br.com.fdantasb.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import br.com.fdantasb.data.ProductData;
+import br.com.fdantasb.data.Similar;
 import br.com.fdantasb.model.Product;
 import br.com.fdantasb.model.Tag;
 import br.com.fdantasb.repository.ProductRepository;
@@ -146,15 +151,61 @@ public class ProductService {
 		return result;
 	}
 
-	public List<ProductData> findSimilarProductDataList(Long id) {
+	public List<Similar> findSimilarProductDataList(Long id) {
 		Product product = productRepository.findById(id).get();
 		if (product == null) {
 			LOG.info(NOT_FOUND_PRODUCT + id);
         	throw new ProductException(NOT_FOUND_PRODUCT + id);
 		}
+		List<Product> all = productRepository.findAll();
+		all.remove(product);
+		List<Similar> result = new ArrayList<>();
+		
+		double[] tagPositionA = getArrayPositionValue(product.getTagList());
+		double[] tagPositionB = null;
+		HashMap<Double, Product> distanceProductMap = new HashMap<Double, Product>();
+		
+		for (Product similar : all) {
+			tagPositionB = getArrayPositionValue(similar.getTagList());
+			
+			double distance = calculateDistance(tagPositionA, tagPositionB);
+			
+			if (distance > 0) {
+				distanceProductMap.put(distance, similar);
+			}
+		}
+		
+		distanceProductMap.entrySet().stream().sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey())).forEach(o -> result.add(convertMapProductSimilar(o)));;
 		
 		
-		return null;
+		return result;
 	}
+
+	private Similar convertMapProductSimilar(Entry<Double, Product> entry) {
+		Similar result = new Similar();
+		result.setId(entry.getValue().getId());
+		result.setName(entry.getValue().getName());
+		result.setSimilarity(entry.getKey());
+		return result;
+	}
+
+	private double[] getArrayPositionValue(List<Tag> tagList) {
+		double[] array = new double[20];
+		for (Tag tag : tagList) {
+			array[Integer.valueOf(tag.getPosition())] = Integer.valueOf(tag.getPosition()); 
+		}
+		return array;
+	}
+	
+	public static double calculateDistance(double[] tagPositionA, double[] tagPositionB)
+    {
+        double Sum = 0.0;
+        for(int i=0;i<tagPositionA.length;i++) {
+           Sum = Sum + Math.pow((tagPositionA[i]-tagPositionB[i]),2.0);
+        }
+        double result = new BigDecimal(1/(1+Math.sqrt(Sum))).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        
+		return result;
+    }
 
 }

@@ -117,6 +117,8 @@ This is the APIs available:
 - http://localhost:8080/product/create/list -> to use the payload to populate products;
 - http://localhost:8080/product/similar/{id} -> to find similar products using the ID;
 
+You can use the following Collection in Postman: https://www.getpostman.com/collections/ce03d39bca9c83799b36
+
 **********************************************************************************************************************************************************
 
 Part 2: SAP HYBRIS

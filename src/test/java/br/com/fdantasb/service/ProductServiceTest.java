@@ -1,5 +1,7 @@
 package br.com.fdantasb.service;
 
+import br.com.fdantasb.data.ProductData;
+import br.com.fdantasb.data.Similar;
 import br.com.fdantasb.model.Product;
 import br.com.fdantasb.model.Tag;
 import org.junit.Assert;
@@ -12,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,22 +22,17 @@ public class ProductServiceTest {
     @Autowired
     private ProductService productService;
 
+
     @Test
-    public void findTagSuccess(){
-        Tag tag = productService.findTagByName("balada");
+    public void findTagByName() {
+        Tag tag = productService.findTagByName("delicado");
         Assert.assertNotNull(tag);
-    }
-    
-    @Test
-    public void findTagError() {
-    	Tag tag = productService.findTagByName("paete");
-        Assert.assertNull(tag);
     }
 
     @Test
-    public void createProductSuccess(){
+    public void createProduct() {
         Product product = new Product();
-        product.setId(new Random().nextLong());
+        product.setId(55555555l);
         product.setName("Saia Maxi Chiffon Saint");
 
         List<String> taglist = new ArrayList<>();
@@ -47,6 +43,16 @@ public class ProductServiceTest {
         Product result = productService.createProduct(product);
         Assert.assertNotNull(result);
     }
-    
 
+    @Test
+    public void findAllProductDataList() {
+        List<ProductData> allProductDataList = productService.findAllProductDataList();
+        Assert.assertNotNull(allProductDataList);
+    }
+
+    @Test
+    public void findSimilarProductDataList() {
+        List<Similar> similarProductDataList = productService.findSimilarProductDataList(55555555l);
+        Assert.assertNotNull(similarProductDataList);
+    }
 }

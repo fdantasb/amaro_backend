@@ -177,8 +177,10 @@ public class ProductService {
 			}
 		}
 		LOG.info("Quantidade de produtos similares: " + distanceProductMap.size());
-		distanceProductMap.entrySet().stream().sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey())).forEach(o -> result.add(convertMapProductSimilar(o)));;
-		
+		if (!distanceProductMap.isEmpty()){
+			distanceProductMap.entrySet().stream().sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey())).forEach(o -> result.add(convertMapProductSimilar(o)));;
+		}
+
 		return result;
 	}
 

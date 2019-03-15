@@ -50,9 +50,4 @@ public class ProductServiceTest {
         Assert.assertNotNull(allProductDataList);
     }
 
-    @Test
-    public void findSimilarProductDataList() {
-        List<Similar> similarProductDataList = productService.findSimilarProductDataList(55555555l);
-        Assert.assertNotNull(similarProductDataList);
-    }
 }

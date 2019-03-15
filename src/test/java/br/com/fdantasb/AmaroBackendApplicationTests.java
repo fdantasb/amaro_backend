@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -121,7 +122,12 @@ public class AmaroBackendApplicationTests {
 		tag19.setPosition("19");
 		list.add(tag19);
 
-		repository.saveAll(list);
+		List<Tag> all = repository.findAll();
+		list.removeIf(t -> all.stream().anyMatch(tag -> t.getNome().equals(tag.getNome())));
+
+		if (!list.isEmpty()) {
+			repository.saveAll(list);
+		}
 
 	}
 

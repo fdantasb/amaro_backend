@@ -125,10 +125,7 @@ public class ProductService {
 		List<ProductData> result = new ArrayList<>();
 		
 		allProduct.stream().forEach(p -> result.add(convertProductData(p)));
-		
-		
 		return result;
-		
 	}
 
 	private ProductData convertProductData(Product p) {
@@ -152,20 +149,24 @@ public class ProductService {
 	}
 
 	public List<Similar> findSimilarProductDataList(Long id) {
+		LOG.info("Busca de produtos simlares");
 		Product product = productRepository.findById(id).get();
 		if (product == null) {
 			LOG.info(NOT_FOUND_PRODUCT + id);
         	throw new ProductException(NOT_FOUND_PRODUCT + id);
 		}
+		LOG.info("Produto encontrado, id: " + id);
 		List<Product> all = productRepository.findAll();
 		all.remove(product);
 		List<Similar> result = new ArrayList<>();
 		
+		//Transforma array de tag para comparacao
 		double[] tagPositionA = getArrayPositionValue(product.getTagList());
 		double[] tagPositionB = null;
 		HashMap<Double, Product> distanceProductMap = new HashMap<Double, Product>();
 		
 		for (Product similar : all) {
+			LOG.info("criando array de comparacao para o produto: " + similar.getId());
 			tagPositionB = getArrayPositionValue(similar.getTagList());
 			
 			double distance = calculateDistance(tagPositionA, tagPositionB);
@@ -174,9 +175,8 @@ public class ProductService {
 				distanceProductMap.put(distance, similar);
 			}
 		}
-		
+		LOG.info("Quantidade de produtos similares: " + distanceProductMap.size());
 		distanceProductMap.entrySet().stream().sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey())).forEach(o -> result.add(convertMapProductSimilar(o)));;
-		
 		
 		return result;
 	}
@@ -190,6 +190,8 @@ public class ProductService {
 	}
 
 	private double[] getArrayPositionValue(List<Tag> tagList) {
+		LOG.info("Entra no metodo de converter para array de posicao");
+		LOG.info("Quantidade de tags para converter: " + tagList.size());
 		double[] array = new double[20];
 		for (Tag tag : tagList) {
 			array[Integer.valueOf(tag.getPosition())] = Integer.valueOf(tag.getPosition()); 
@@ -197,14 +199,13 @@ public class ProductService {
 		return array;
 	}
 	
-	public static double calculateDistance(double[] tagPositionA, double[] tagPositionB)
-    {
+	public double calculateDistance(double[] tagPositionA, double[] tagPositionB)   {
         double Sum = 0.0;
         for(int i=0;i<tagPositionA.length;i++) {
            Sum = Sum + Math.pow((tagPositionA[i]-tagPositionB[i]),2.0);
         }
         double result = new BigDecimal(1/(1+Math.sqrt(Sum))).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        
+        LOG.info("Distancia: " + result);
 		return result;
     }
 
